@@ -54,7 +54,13 @@ npm run build    # production → dist/
 npm run preview  # preview build on :4173
 ```
 
-No backend, no env vars. Static Vite app — deploy `dist/` anywhere (Netlify, Vercel, GitHub Pages).
+No backend, no env vars. Static Vite app — deploy `dist/` anywhere (Netlify, Vercel, or GitHub Pages).
+
+## GitHub Pages
+
+In the repository, open **Settings → Pages** and choose **GitHub Actions** as the Build and deployment source if it is not already selected. Then the `Deploy to GitHub Pages` workflow builds the app and publishes `dist/` whenever `main` is updated. You can also start it manually from **Actions → Deploy to GitHub Pages → Run workflow**. Vite uses the `/Win11-Web/` project-site base path in GitHub Actions so the built assets load correctly from GitHub Pages.
+
+After the workflow has been merged into `main` and its first deployment succeeds, the site will be available at <https://iant89.github.io/Win11-Web/>.
 
 ---
 
@@ -62,6 +68,8 @@ No backend, no env vars. Static Vite app — deploy `dist/` anywhere (Netlify, V
 
 ```
 Win11-Web/
+├─ .github/
+│  └─ workflows/deploy-pages.yml # Build and deploy to GitHub Pages
 ├─ index.html          # Shell: wallpaper, taskbar, Start, Widgets, Task View, panels
 ├─ src/
 │  ├─ style.css        # Fluent / Mica design system, animations, responsive

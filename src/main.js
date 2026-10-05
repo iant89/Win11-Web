@@ -66,6 +66,132 @@ const storeApps = [
   {name:'Netflix', cat:'Entertainment', rating:4.5, desc:'Unlimited movies & shows.', color:'#E50914', letter:'N', installed:false},
 ];
 
+// Settings pages. ctrl tuples: ['toggle',on] ['button',label,toastMsg] ['badge',text]
+// ['text',value] ['progress',percent] — rendered by settingCtrl().
+const settingsPages = {
+  personalization: { nav:'Personalization', icon:'🎨', title:'Personalization',
+    sub:'Make your MVP feel like yours — light, calm, and focused.',
+    cards:[
+      {icon:'🌓', title:'Theme', desc:'Light • Acrylic and rounded corners', ctrl:['toggle', true]},
+      {icon:'🖼', title:'Background', desc:'Bloom • Windows 11 signature gradient', ctrl:['button','Browse','Opening wallpaper picker…']},
+      {icon:'🎯', title:'Taskbar alignment', desc:'Centered • The heart of the new design', ctrl:['toggle', true]},
+      {icon:'🔔', title:'Notifications', desc:'Get alerts from apps and system', ctrl:['toggle', true]},
+      {icon:'🛡', title:'Security baseline', desc:'TPM 2.0 • Secure Boot • Windows Hello — all active', ctrl:['badge','✓ Secure'], hl:true},
+    ],
+    footer:'<div style="margin-top:18px;padding:14px;background:#f9fafb;border:1px dashed #d1d5db;border-radius:8px;font-size:12px;color:#6b7280">MVP Thinking: security and reliability are non-negotiable foundations. Everything else — widgets, Teams, gaming — layers on top.</div>' },
+  system: { nav:'System', icon:'🔊', title:'System', sub:'Your device at a glance — specs, storage, sound and power.',
+    cards:[
+      {icon:'🖥', title:'Device name', desc:'WIN11-WEB • Chromium • 64-bit', ctrl:['text','WIN11-WEB']},
+      {icon:'💾', title:'Storage', desc:'128 GB free of 512 GB • Windows (C:)', ctrl:['progress',25]},
+      {icon:'🔊', title:'Sound', desc:'Output • Speakers (HD Audio)', ctrl:['button','Test','Playing test tone on Speakers (HD)…']},
+      {icon:'🔀', title:'Multitasking', desc:'Snap windows, show tabs in Alt+Tab', ctrl:['toggle', true]},
+      {icon:'🔋', title:'Power & battery', desc:'87% • 4 h 12 min remaining', ctrl:['text','Balanced']},
+    ]},
+  bluetooth: { nav:'Bluetooth & devices', icon:'🌐', title:'Bluetooth & devices', sub:'Pair and manage your accessories.',
+    cards:[
+      {icon:'🌐', title:'Bluetooth', desc:'Discoverable as “WIN11-WEB”', ctrl:['toggle', true]},
+      {icon:'🎧', title:'Surface Headphones 2', desc:'Connected • Music, calls', ctrl:['badge','Connected']},
+      {icon:'🖱', title:'MX Master 3', desc:'Paired • 80% battery', ctrl:['text','80%']},
+      {icon:'➕', title:'Add device', desc:'Bluetooth, displays, docks and more', ctrl:['button','Add','Searching for nearby devices…']},
+    ]},
+  network: { nav:'Network & internet', icon:'📶', title:'Network & internet', sub:'Contoso-5G • Connected, secured.',
+    cards:[
+      {icon:'📶', title:'Wi-Fi', desc:'Contoso-5G • Strong signal', ctrl:['toggle', true]},
+      {icon:'🏢', title:'Contoso-Guest', desc:'Open network', ctrl:['button','Connect','Connecting to Contoso-Guest…']},
+      {icon:'✈', title:'Airplane mode', desc:'Disables all wireless radios', ctrl:['toggle', false]},
+      {icon:'📊', title:'Data usage', desc:'2.4 GB in the last 30 days', ctrl:['progress',12]},
+    ]},
+  accounts: { nav:'Accounts', icon:'👤', title:'Accounts', sub:'Your profile, sign-in options and sync.',
+    header:'<div class="account-banner"><span class="avatar">AC</span><div><b>Avery Chen</b><br><small style="color:var(--muted)">avery@contoso.com • Local account • Administrator</small></div></div>',
+    cards:[
+      {icon:'🔑', title:'Sign-in options', desc:'Windows Hello face • PIN • Security key', ctrl:['button','Manage','Opening sign-in options…']},
+      {icon:'🔄', title:'Sync my settings', desc:'Remember apps and preferences', ctrl:['toggle', true]},
+      {icon:'👥', title:'Other users', desc:'Family & work accounts', ctrl:['button','Add account','Launching account setup…']},
+    ]},
+  time: { nav:'Time & language', icon:'⏰', title:'Time & language', sub:'Clock, time zone, region and languages.',
+    cards:[
+      {icon:'⏰', title:'Set time automatically', desc:'Synced • time.windows.com', ctrl:['toggle', true]},
+      {icon:'🌍', title:'Time zone', desc:'Set automatically', ctrl:['text','(UTC-08:00) Pacific']},
+      {icon:'🗣', title:'Windows display language', desc:'Menus, dialogs and system text', ctrl:['text','English (US)']},
+      {icon:'⌨', title:'Keyboard', desc:'US • English (US)', ctrl:['button','Options','Opening keyboard options…']},
+    ]},
+  gaming: { nav:'Gaming', icon:'🎮', title:'Gaming', sub:'Game Mode, Game Bar and captures.',
+    cards:[
+      {icon:'🎮', title:'Game Mode', desc:'Optimize your PC for play', ctrl:['toggle', true]},
+      {icon:'📷', title:'Game Bar', desc:'Win+G for overlays and captures', ctrl:['toggle', true]},
+      {icon:'⏺', title:'Record what happened', desc:'Keep the last 30 seconds', ctrl:['toggle', false]},
+    ]},
+  accessibility: { nav:'Accessibility', icon:'♿', title:'Accessibility', sub:'Vision, hearing and interaction adjustments.',
+    cards:[
+      {icon:'🔍', title:'Text size', desc:'Scale UI text without zooming', ctrl:['progress',55]},
+      {icon:'💠', title:'Transparency effects', desc:'Acrylic and mica surfaces', ctrl:['toggle', true]},
+      {icon:'✨', title:'Animation effects', desc:'Window and widget motion', ctrl:['toggle', true]},
+      {icon:'🖱', title:'Pointer & touch', desc:'Large pointer, thicker outlines', ctrl:['button','Adjust','Opening pointer options…']},
+    ]},
+  privacy: { nav:'Privacy & security', icon:'🔒', title:'Privacy & security', sub:'Permissions and the security baseline.',
+    cards:[
+      {icon:'🛡', title:'Windows Security', desc:'Virus protection • Firewall • TPM 2.0', ctrl:['badge','✓ Secure'], hl:true},
+      {icon:'📷', title:'Camera access', desc:'3 apps have access', ctrl:['toggle', true]},
+      {icon:'🎙', title:'Microphone access', desc:'5 apps have access', ctrl:['toggle', true]},
+      {icon:'📍', title:'Location', desc:'Off for this device', ctrl:['toggle', false]},
+    ]},
+  update: { nav:'Windows Update', icon:'🔄', title:'Windows Update', sub:'Updates, optional updates and update history.',
+    header:'<div class="update-status"><div><b>You’re up to date</b><br><span id="update-checked">Last checked today</span></div><button class="mini-btn" data-action="check-updates">Check for updates</button></div>',
+    cards:[
+      {icon:'⏸', title:'Pause updates', desc:'Suspend for 1 week', ctrl:['button','Pause','Updates paused for 1 week']},
+      {icon:'📦', title:'Other Microsoft products', desc:'Receive updates for Office and more', ctrl:['toggle', true]},
+    ]},
+};
+
+function settingCtrl(c){
+  switch(c[0]){
+    case 'toggle':  return `<div class="toggle ${c[1]?'on':''}"></div>`;
+    case 'button':  return `<button class="mini-btn" data-toast="${c[2]||''}">${c[1]}</button>`;
+    case 'badge':   return `<span class="secure-badge">${c[1]}</span>`;
+    case 'text':    return `<span class="setting-value">${c[1]}</span>`;
+    case 'progress':return `<span class="progress"><span style="width:${c[1]}%"></span></span>`;
+    default: return '';
+  }
+}
+
+function renderSettingsPage(winEl, id){
+  const p = settingsPages[id];
+  const el = winEl.querySelector('.settings-content');
+  el.innerHTML = `
+    <h2>${p.title}</h2><p>${p.sub}</p>
+    ${p.header||''}
+    ${p.cards.map(cd=>`
+      <div class="setting-card"${cd.hl?' style="background:#eff6ff;border-color:#bfdbfe"':''}>
+        <span class="icon"${cd.hl?' style="background:#dbeafe"':''}>${cd.icon}</span>
+        <div class="meta"><b>${cd.title}</b><small>${cd.desc}</small></div>
+        ${settingCtrl(cd.ctrl)}
+      </div>`).join('')}
+    ${p.footer||''}`;
+  el.querySelectorAll('.toggle').forEach(t=>{
+    t.addEventListener('click', ()=>{
+      t.classList.toggle('on');
+      toast('Settings', t.classList.contains('on')?'Enabled':'Disabled', '#6B7280','⚙');
+    });
+  });
+  el.querySelectorAll('.mini-btn').forEach(b=>{
+    b.addEventListener('click', ()=>{
+      if(b.dataset.action==='check-updates'){
+        const label = b.textContent;
+        b.disabled = true; b.textContent = 'Checking…';
+        setTimeout(()=>{
+          b.disabled = false; b.textContent = label;
+          const when = el.querySelector('#update-checked');
+          if(when) when.textContent = 'Last checked just now';
+          toast('Windows Update', 'You’re up to date • No updates available', '#10B981','✓');
+        }, 900);
+      } else {
+        toast('Settings', b.dataset.toast || `${b.textContent} — coming soon`, '#0078D4','⚙');
+      }
+    });
+  });
+  el.scrollTop = 0;
+}
+
 let fileSystem = {
   'This PC': [
     {name:'Documents', type:'folder', size:'—', date:'Today', icon:'📁', children:[]},
@@ -745,45 +871,30 @@ function settingsHTML(){
     <div class="settings-sidebar">
       <h3>Settings</h3>
       <div class="settings-nav">
-        <button class="active"><span>🎨</span> Personalization</button>
-        <button><span>🔊</span> System</button>
-        <button><span>🌐</span> Bluetooth & devices</button>
-        <button><span>📶</span> Network & internet</button>
-        <button><span>👤</span> Accounts</button>
-        <button><span>⏰</span> Time & language</button>
-        <button><span>🎮</span> Gaming</button>
-        <button><span>♿</span> Accessibility</button>
-        <button><span>🔒</span> Privacy & security</button>
-        <button><span>🔄</span> Windows Update</button>
+        ${Object.entries(settingsPages).map(([id,p],i)=>`<button data-page="${id}" class="${i===0?'active':''}"><span>${p.icon}</span> ${p.nav}</button>`).join('')}
       </div>
     </div>
-    <div class="settings-content">
-      <h2>Personalization</h2>
-      <p>Make your MVP feel like yours — light, calm, and focused.</p>
-      <div class="setting-card"><span class="icon">🌓</span><div class="meta"><b>Theme</b><small>Light • Acrylic and rounded corners</small></div><div class="toggle on" data-toggle="theme"></div></div>
-      <div class="setting-card"><span class="icon">🖼</span><div class="meta"><b>Background</b><small>Bloom • Windows 11 signature gradient</small></div><button style="padding:6px 12px;border-radius:6px;border:1px solid rgba(0,0,0,.08);background:white;cursor:pointer;font-size:12px">Browse</button></div>
-      <div class="setting-card"><span class="icon">🎯</span><div class="meta"><b>Taskbar alignment</b><small>Centered • The heart of the new design</small></div><div class="toggle on"></div></div>
-      <div class="setting-card"><span class="icon">🔔</span><div class="meta"><b>Notifications</b><small>Get alerts from apps and system</small></div><div class="toggle on"></div></div>
-      <div class="setting-card" style="background:#eff6ff;border-color:#bfdbfe"><span class="icon" style="background:#dbeafe">🛡</span><div class="meta"><b>Security baseline</b><small style="color:#1e40af">TPM 2.0 • Secure Boot • Windows Hello — all active</small></div><span style="font-size:12px;color:#1d4ed8;font-weight:600">✓ Secure</span></div>
-      <div style="margin-top:18px;padding:14px;background:#f9fafb;border:1px dashed #d1d5db;border-radius:8px;font-size:12px;color:#6b7280">MVP Thinking: security and reliability are non-negotiable foundations. Everything else — widgets, Teams, gaming — layers on top.</div>
-    </div>
+    <div class="settings-content"></div>
   </div>`;
 }
-function vscodeHTML(){
-  return `
-  <div class="vscode">
-    <div class="vs-sidebar">≡<span>⧉</span><span>🔍</span><span>⑂</span><span>🐛</span><span style="margin-top:auto">⚙</span></div>
-    <div class="vs-explorer">
-      <h4>Explorer</h4>
-      <div style="font-weight:600;margin:8px 0 6px">WIN11-WEB</div>
-      <div class="vs-file active">› index.html</div>
-      <div class="vs-file">› src/style.css</div>
-      <div class="vs-file">› src/main.js</div>
-      <div class="vs-file">› README.md</div>
-      <div style="margin-top:12px;color:#858585;font-size:11px">OUTLINE</div>
-      <div style="margin-top:8px;display:flex;gap:6px"><span style="background:#007ACC;color:white;padding:2px 6px;border-radius:4px;font-size:11px">MVP</span><span style="font-size:11px;color:#858585">Zero build, instant preview</span></div>
-    </div>
-    <div class="vs-editor"><span class="cm">// Windows 11 Web MVP — core value: let users run apps smoothly</span>
+const vsFiles = {
+  'index.html': `<span class="cm">&lt;!-- Win11-Web — a Windows 11 MVP that runs in the browser --&gt;</span>
+<span class="kw">&lt;body&gt;</span>
+  <span class="kw">&lt;div</span> <span class="fn">id</span>=<span class="str">"boot-screen"</span><span class="kw">&gt;</span> … <span class="kw">&lt;/div&gt;</span>
+  <span class="kw">&lt;div</span> <span class="fn">id</span>=<span class="str">"wallpaper"</span><span class="kw">&gt;</span> … <span class="kw">&lt;/div&gt;</span>
+  <span class="kw">&lt;div</span> <span class="fn">id</span>=<span class="str">"windows"</span><span class="kw">&gt;&lt;/div&gt;</span>
+  <span class="kw">&lt;div</span> <span class="fn">id</span>=<span class="str">"taskbar"</span><span class="kw">&gt;</span> … <span class="kw">&lt;/div&gt;</span>
+  <span class="kw">&lt;script</span> <span class="fn">type</span>=<span class="str">"module"</span> <span class="fn">src</span>=<span class="str">"/src/main.js"</span><span class="kw">&gt;&lt;/script&gt;</span>
+<span class="kw">&lt;/body&gt;</span>`,
+  'src/style.css': `<span class="cm">/* Mica, acrylic and the centered taskbar */</span>
+<span class="fn">:root</span> {
+  <span class="kw">--accent</span>: <span class="str">#0078d4</span>;
+  <span class="kw">--radius-lg</span>: <span class="str">12px</span>;
+  <span class="kw">--shadow-window</span>: <span class="str">0 8px 28px rgb(0 0 0 / .14)</span>;
+}
+<span class="fn">.window</span> { <span class="kw">border-radius</span>: <span class="str">var(--radius-lg)</span>; <span class="kw">box-shadow</span>: <span class="str">var(--shadow-window)</span>; }
+<span class="fn">#taskbar</span> { <span class="kw">backdrop-filter</span>: <span class="str">blur(20px) saturate(1.2)</span>; }`,
+  'src/main.js': `<span class="cm">// Windows 11 Web MVP — core value: let users run apps smoothly</span>
 <span class="kw">function</span> <span class="fn">createWindow</span>(app) {
   <span class="kw">const</span> win = <span class="str">"acrylic + rounded + shadow"</span>;
   <span class="kw">return</span> {
@@ -794,9 +905,84 @@ function vscodeHTML(){
   };
 }
 <span class="cm">// Try: File Explorer → snap me left, Edge → snap right</span>
-<span class="fn">toast</span>(<span class="str">"Tip"</span>, <span class="str">"Drag windows to edges to snap!"</span>);
-</div>
+<span class="fn">toast</span>(<span class="str">"Tip"</span>, <span class="str">"Drag windows to edges to snap!"</span>);`,
+  'README.md': `<span class="fn"># Win11-Web</span>
+A Windows 11 MVP that runs entirely in the browser.
+
+<span class="fn">## Features</span>
+- Snap Layouts & Virtual Desktops
+- File Explorer, Store, Edge, and more
+- <span class="cm">Zero build — open index.html and go</span>
+
+<span class="fn">## Run</span>
+npm run dev`,
+};
+
+function vscodeHTML(){
+  return `
+  <div class="vscode">
+    <div class="vs-sidebar">≡<span class="on" data-vs="explorer" title="Explorer">⧉</span><span title="Search">🔍</span><span title="Source control">⑂</span><span title="Run & debug">🐛</span><span style="margin-top:auto" title="Settings">⚙</span></div>
+    <div class="vs-explorer">
+      <h4>Explorer</h4>
+      <div style="font-weight:600;margin:8px 0 6px">WIN11-WEB</div>
+      <div class="vs-file" data-file="index.html">› index.html</div>
+      <div class="vs-file" data-file="src/style.css">› src/style.css</div>
+      <div class="vs-file" data-file="src/main.js">› src/main.js</div>
+      <div class="vs-file" data-file="README.md">› README.md</div>
+      <div style="margin-top:12px;color:#858585;font-size:11px">OUTLINE</div>
+      <div style="margin-top:8px;display:flex;gap:6px"><span style="background:#007ACC;color:white;padding:2px 6px;border-radius:4px;font-size:11px">MVP</span><span style="font-size:11px;color:#858585">Zero build, instant preview</span></div>
+    </div>
+    <div class="vs-main">
+      <div class="vs-tabs"></div>
+      <div class="vs-editor"></div>
+    </div>
   </div>`;
+}
+
+function initVscode(winEl){
+  let open = ['index.html'];
+  let active = 'index.html';
+  const tabsEl = winEl.querySelector('.vs-tabs');
+  const editorEl = winEl.querySelector('.vs-editor');
+  const titleEl = winEl.querySelector('.titlebar-title');
+
+  function render(){
+    tabsEl.innerHTML = open.map(f=>`
+      <div class="vs-tab ${f===active?'active':''}" data-tab="${f}">
+        <span>${f.split('/').pop()}</span><span class="x" data-x="${f}" title="Close">✕</span>
+      </div>`).join('');
+    tabsEl.querySelectorAll('.vs-tab').forEach(t=>{
+      t.addEventListener('click', ()=>{ active = t.dataset.tab; render(); });
+    });
+    tabsEl.querySelectorAll('.x').forEach(x=>{
+      x.addEventListener('click', (e)=>{ e.stopPropagation(); closeTab(x.dataset.x); });
+    });
+    editorEl.innerHTML = active ? vsFiles[active] :
+      `<div class="vs-empty">No file is open.<br>Pick one from the Explorer to start editing.</div>`;
+    winEl.querySelectorAll('.vs-file').forEach(f=> f.classList.toggle('active', f.dataset.file===active));
+    if(titleEl) titleEl.textContent = active ? `${active} — WIN11-WEB` : 'Visual Studio Code';
+  }
+  function closeTab(name){
+    open = open.filter(f=> f!==name);
+    if(active===name) active = open[open.length-1] || null;
+    render();
+  }
+
+  winEl.querySelectorAll('.vs-file').forEach(f=>{
+    f.addEventListener('click', ()=>{
+      const name = f.dataset.file;
+      if(!open.includes(name)) open.push(name);
+      active = name;
+      render();
+    });
+  });
+  winEl.querySelector('[data-vs="explorer"]').addEventListener('click', (e)=>{
+    const ex = winEl.querySelector('.vs-explorer');
+    const hidden = ex.style.display==='none';
+    ex.style.display = hidden ? '' : 'none';
+    e.currentTarget.classList.toggle('on', hidden);
+  });
+  render();
 }
 function photosHTML(){
   return `<div class="gallery">
@@ -809,6 +995,7 @@ function initApp(winEl, app, opts){
   if(app==='store') initStore(winEl);
   if(app==='calculator') initCalculator(winEl);
   if(app==='settings') initSettings(winEl);
+  if(app==='vscode') initVscode(winEl);
   // notepad, edge have no extra init for now
 }
 function initExplorer(winEl, opts){
@@ -1028,19 +1215,14 @@ function initCalculator(winEl){
   winEl.setAttribute('tabindex','0'); winEl.focus();
 }
 function initSettings(winEl){
-  winEl.querySelectorAll('.toggle').forEach(t=>{
-    t.addEventListener('click', ()=> {
-      t.classList.toggle('on');
-      toast('Settings', t.classList.contains('on')?'Enabled':'Disabled', '#6B7280','⚙');
-    });
-  });
   winEl.querySelectorAll('.settings-nav button').forEach(b=>{
     b.addEventListener('click', ()=> {
       winEl.querySelectorAll('.settings-nav button').forEach(x=> x.classList.remove('active'));
       b.classList.add('active');
-      toast('Settings', `Opened ${b.textContent.trim()}`, '#0078D4','⚙');
+      renderSettingsPage(winEl, b.dataset.page);
     });
   });
+  renderSettingsPage(winEl, 'personalization');
 }
 
 // Open app helpers

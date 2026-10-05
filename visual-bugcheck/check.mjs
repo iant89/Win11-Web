@@ -290,6 +290,16 @@ async function run() {
         for (const k of ['7', '+', '5', '=']) await page.click(`.calc button[data-c="${k}"]`);
         await sleep(300); await shot('12b-calc-result');
       }
+      if (app === 'settings') {
+        await page.click('.window.active .settings-nav button:has-text("System")'); await sleep(400);
+        await shot('13b-settings-system');
+        await page.click('.window.active .settings-nav button:has-text("Windows Update")'); await sleep(400);
+        await shot('13c-settings-update');
+      }
+      if (app === 'vscode') {
+        await page.click('.window.active .vs-file:has-text("README.md")'); await sleep(300);
+        await shot('14b-vscode-tabs');
+      }
       await closeAllWindows(); await sleep(300);
     }
   });

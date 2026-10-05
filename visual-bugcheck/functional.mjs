@@ -184,23 +184,45 @@ try {
   // ---------------------------------------------------------------- settings
   section('Settings');
   await openApp('settings'); await sleep(400);
-  await page.click('.window.active .toggle[data-toggle="theme"]'); await sleep(200);
-  const toggled = await $eval('.window.active .toggle[data-toggle="theme"]', (el) => el.classList.contains('on'));
+  await page.click('.window.active .settings-content .toggle'); await sleep(200);
+  const toggled = await $eval('.window.active .settings-content .toggle', (el) => el.classList.contains('on'));
   t('toggles flip (+ toast)', toggled === false ? 'ok' : 'bug');
   await page.click('.window.active .settings-nav button:has-text("System")'); await sleep(300);
-  const navActive = await $eval('.window.active .settings-nav button:nth-child(2)', (el) => el.classList.contains('active'));
-  const contentH2 = await $eval('.window.active .settings-content h2', (el) => el.textContent);
-  t('nav switches pages', navActive && contentH2 !== 'Personalization' ? 'ok' : 'facade',
-    `highlight moves, content stays “${contentH2}”`);
+  const sysH2 = await $eval('.window.active .settings-content h2', (el) => el.textContent);
+  const sysCards = await page.evaluate(() => document.querySelectorAll('.window.active .setting-card').length);
+  t('nav switches to System page', sysH2 === 'System' && sysCards === 5 ? 'ok' : 'bug', `h2=${sysH2}, cards=${sysCards}`);
+  await page.click('.window.active .settings-nav button:has-text("Windows Update")'); await sleep(300);
+  await page.click('.window.active [data-action="check-updates"]'); await sleep(200);
+  const checking = await $eval('.window.active [data-action="check-updates"]', (el) => el.textContent);
+  await sleep(1100);
+  const checked = await $eval('.window.active #update-checked', (el) => el.textContent);
+  t('Windows Update: check flow', checking === 'Checking…' && checked === 'Last checked just now' ? 'ok' : 'bug');
+  await page.click('.window.active .settings-nav button:has-text("Personalization")'); await sleep(300);
+  t('returning restores Personalization',
+    (await $eval('.window.active .settings-content h2', (el) => el.textContent)) === 'Personalization' ? 'ok' : 'bug');
   await closeActive(); await sleep(300);
 
   // ---------------------------------------------------------------- vscode / photos
   section('VS Code & Photos (mocks)');
   await openApp('vscode'); await sleep(400);
+  t('VS Code opens with index.html tab',
+    (await $eval('.window.active .vs-tab.active', (el) => el.dataset.tab)) === 'index.html' &&
+    (await $eval('.window.active .vs-editor', (el) => el.textContent)).includes('boot-screen') ? 'ok' : 'bug');
   await page.click('.window.active .vs-file:has-text("README.md")'); await sleep(300);
-  t('VS Code file tree opens tabs',
-    await page.evaluate(() => !!document.querySelector('.window.active .vs-tab, .window.active .vs-tabs')) ? 'ok' : 'facade',
-    'editor is a static snippet');
+  const twoTabs = await page.evaluate(() => document.querySelectorAll('.window.active .vs-tab').length) === 2;
+  const readmeShown = (await $eval('.window.active .vs-editor', (el) => el.textContent)).includes('# Win11-Web');
+  t('file tree opens tabs + renders content', twoTabs && readmeShown ? 'ok' : 'bug');
+  await page.click('.window.active .vs-tab[data-tab="index.html"]'); await sleep(200);
+  t('tab switching', (await $eval('.window.active .vs-editor', (el) => el.textContent)).includes('boot-screen') ? 'ok' : 'bug');
+  await page.click('.window.active .vs-tab[data-tab="index.html"] .x'); await sleep(200);
+  const fellBack = (await $eval('.window.active .vs-tab.active', (el) => el.dataset.tab)) === 'README.md';
+  await page.click('.window.active .vs-tab[data-tab="README.md"] .x'); await sleep(200);
+  const empty = (await $eval('.window.active .vs-editor', (el) => el.textContent)).includes('No file is open');
+  t('closing tabs falls back / empty state', fellBack && empty ? 'ok' : 'bug');
+  await page.click('.window.active [data-vs="explorer"]'); await sleep(200);
+  const explorerHidden = await $eval('.window.active .vs-explorer', (el) => el.style.display === 'none');
+  await page.click('.window.active [data-vs="explorer"]'); await sleep(200);
+  t('activity bar toggles explorer', explorerHidden ? 'ok' : 'bug');
   await closeActive(); await sleep(300);
   await openApp('photos'); await sleep(400);
   t('Photos renders gallery', (await page.evaluate(() => document.querySelectorAll('.window.active .gallery-item').length)) === 8 ? 'ok' : 'bug');

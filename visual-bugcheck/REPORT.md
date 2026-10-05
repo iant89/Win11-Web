@@ -22,7 +22,28 @@ visual-bugcheck/check.sh            # everything in one go
 
 ---
 
-## Confirmed visual bugs
+## Fix log (2026-10-05)
+
+All 12 findings below were fixed and re-verified — `visual-bugcheck/check.sh` now reports `12 ok, 0 bug(s)` and the screenshots in `shots/` were regenerated from the fixed build.
+
+| Bug | Fix |
+|---|---|
+| B1 | `#boot-screen` background → `#000` (logo now visible) |
+| B2 | titlebar button rule scoped to `.titlebar-controls > button, .snap-trigger > button` so `.snap-option` keeps its styles |
+| B3 | `closeWindow()` re-finds the index by id inside the timeout (no stale splice → no ghosts) |
+| B4 | snap partner lookup also requires `x.el.isConnected` (and B3 removes ghosts at the source) |
+| B5 | `.start-scroll` wrapper with `overflow-y:auto`; search + user footer stay pinned |
+| B6 | `#quick-settings.open ~ #toasts, #notification-center.open ~ #toasts { right:388px }` — toasts slide left of open flyouts |
+| B7 | `#widgets-panel` `bottom:auto; max-height:calc(100vh - 70px)` — panel hugs content |
+| B8 | `#task-view` inset bottom = `var(--taskbar-h)` — timeline visible above taskbar |
+| B9 | pinned data corrected: unique labels (`Pictures`), honest ids (`paint`, `spotify`, `terminal` → “coming soon” toast) |
+| B10 | `.app-card-footer{flex-wrap:wrap}` + `.rating{white-space:nowrap}` |
+| B11 | mini calendar rendered from `new Date()` (`renderMiniCal()` in main.js) |
+| B12 | taskbar spacers both `flex:1` with centered `flex:none` cluster — truly centered |
+
+---
+
+## Confirmed visual bugs (as found, all fixed — see log above)
 
 ### B1 — Boot screen: Windows logo is invisible (blue-on-blue)
 **Shots:** `01-boot.png`

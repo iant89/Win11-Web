@@ -132,7 +132,7 @@ await shot('08-taskview');
     const bar = document.querySelector('#taskbar').getBoundingClientRect();
     return { hidden: t.bottom > bar.top + 4 };
   });
-  report('B8', 'task view timeline visible', r.hidden, 'timeline sits under the taskbar');
+  report('B8', 'task view timeline visible', r.hidden, r.hidden ? 'timeline sits under the taskbar' : '');
 }
 await page.click('#close-taskview'); await sleep(300);
 

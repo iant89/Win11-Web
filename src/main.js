@@ -12,6 +12,24 @@ function tick(){
 }
 tick(); setInterval(tick, 1000);
 
+// Notification-center mini calendar (always the real current month)
+function renderMiniCal(){
+  const title = $('#nc-cal-title'), grid = $('#mini-cal');
+  if(!title || !grid) return;
+  const now = new Date();
+  title.textContent = now.toLocaleDateString('en-US', {month:'long', year:'numeric'});
+  const startDow = new Date(now.getFullYear(), now.getMonth(), 1).getDay();
+  const daysIn = new Date(now.getFullYear(), now.getMonth()+1, 0).getDate();
+  const prevIn = new Date(now.getFullYear(), now.getMonth(), 0).getDate();
+  const cells = [];
+  for(let i=startDow-1; i>=0; i--) cells.push(`<span class="dim">${prevIn-i}</span>`);
+  for(let d=1; d<=daysIn; d++) cells.push(`<span class="${d===now.getDate()?'today':''}">${d}</span>`);
+  let next=1;
+  while(cells.length % 7) cells.push(`<span class="dim">${next++}</span>`);
+  grid.innerHTML = ['Su','Mo','Tu','We','Th','Fr','Sa'].map(d=>`<span>${d}</span>`).join('') + cells.join('');
+}
+renderMiniCal();
+
 // Data
 const pinnedApps = [
   {id:'edge', name:'Edge', color:'linear-gradient(135deg,#0c59a4,#35b6ed)', icon:'🌐', letter:'e'},
@@ -22,10 +40,10 @@ const pinnedApps = [
   {id:'calculator', name:'Calculator', color:'#A78BFA', icon:'🧮', letter:'±'},
   {id:'vscode', name:'VS Code', color:'#007ACC', icon:'<>', letter:'</>'},
   {id:'photos', name:'Photos', color:'linear-gradient(135deg,#ec4899,#8b5cf6)', icon:'🖼', letter:'◐'},
-  {id:'edge', name:'Paint', color:'linear-gradient(135deg,#f59e0b,#ef4444)', icon:'🎨', letter:'✎'},
-  {id:'explorer', name:'Photos', color:'#34D399', icon:'🏞', letter:'✿'},
-  {id:'store', name:'Spotify', color:'#1DB954', icon:'♪', letter:'♪'},
-  {id:'notepad', name:'Terminal', color:'#111827', icon:'>_', letter:'>_'},
+  {id:'paint', name:'Paint', color:'linear-gradient(135deg,#f59e0b,#ef4444)', icon:'🎨', letter:'✎'},
+  {id:'explorer', name:'Pictures', color:'#34D399', icon:'🏞', letter:'✿'},
+  {id:'spotify', name:'Spotify', color:'#1DB954', icon:'♪', letter:'♪'},
+  {id:'terminal', name:'Terminal', color:'#111827', icon:'>_', letter:'>_'},
 ];
 
 const recommended = [
@@ -375,7 +393,10 @@ function closeWindow(id){
   w.el.style.transform='scale(.96)'; w.el.style.opacity='0';
   setTimeout(()=> {
     w.el.remove();
-    windows.splice(idx,1);
+    // re-find the index: several windows can close in the same tick and a
+    // stale captured index would splice the wrong entry (ghost windows)
+    const i = windows.findIndex(x=> x.id===id);
+    if(i>-1) windows.splice(i,1);
     desktops.forEach(d=> d.windows = d.windows.filter(x=> x!==id));
     if(activeId===id) activeId = windows.filter(x=> x.desktop===currentDesktop && !x.minimized).slice(-1)[0]?.id || null;
     syncTaskbar();
@@ -440,7 +461,7 @@ function handleSnap(id, layout){
   setTimeout(()=> el.style.transition='', 260);
   toast('Snap Layout', layout==='halves'?'Window snapped left • Select another window to fill':'Window snapped • ' + layout, '#0078D4','⊞');
   // show snap overlay for partner selection simulation - auto open first other window to right if exists
-  const other = windows.find(x=> x.id!==id && x.desktop===currentDesktop && !x.minimized);
+  const other = windows.find(x=> x.id!==id && x.desktop===currentDesktop && !x.minimized && x.el.isConnected);
   if(other){
     // snap other to complementary region
     const comp = {

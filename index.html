@@ -165,11 +165,8 @@
       <div class="notif"><span class="n-icon" style="background:#8764B8">📦</span><div><b>Microsoft Store</b><p>Spotify installed successfully</p><span>1 hour ago</span></div></div>
     </div>
     <div class="nc-calendar">
-      <div class="nc-cal-header"><b>October 2025</b> <span>Collapse ▲</span></div>
-      <div class="mini-cal">
-        <span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span>
-        <span class="dim">28</span><span class="dim">29</span><span class="dim">30</span><span>1</span><span>2</span><span>3</span><span>4</span><span class="today">5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span>
-      </div>
+      <div class="nc-cal-header"><b id="nc-cal-title"></b> <span>Collapse ▲</span></div>
+      <div class="mini-cal" id="mini-cal"></div>
     </div>
   </div>
 
@@ -180,14 +177,16 @@
       <input id="start-search" type="text" placeholder="Type here to search" autocomplete="off" />
     </div>
 
-    <div class="start-section">
-      <div class="start-head"><h3>Pinned</h3><button class="pill-btn">All apps ›</button></div>
-      <div id="pinned-grid"></div>
-    </div>
+    <div class="start-scroll">
+      <div class="start-section">
+        <div class="start-head"><h3>Pinned</h3><button class="pill-btn">All apps ›</button></div>
+        <div id="pinned-grid"></div>
+      </div>
 
-    <div class="start-section">
-      <div class="start-head"><h3>Recommended</h3><button class="pill-btn">More ›</button></div>
-      <div id="recommended-list"></div>
+      <div class="start-section">
+        <div class="start-head"><h3>Recommended</h3><button class="pill-btn">More ›</button></div>
+        <div id="recommended-list"></div>
+      </div>
     </div>
 
     <div class="start-footer">

@@ -126,8 +126,8 @@ The mini calendar header/dates and the widget “05 OCT” rows are static marku
 | 10 | Microsoft Store |
 | 11 | Notepad |
 | 12 / 12b | Calculator (+ 7+5=12 interaction) |
-| 13 | Settings |
-| 14 | VS Code mock |
+| 13 / 13b / 13c | Settings — home, System page, Windows Update page |
+| 14 / 14b | VS Code — welcome + tabbed editor |
 | 15 | Photos |
 | 16 / 16b | Explorer grid + list views |
 | 17 | Snap popup (hover maximize) |
@@ -135,3 +135,14 @@ The mini calendar header/dates and the widget “05 OCT” rows are static marku
 | 19 | Snap halves with partner |
 | 20 | Toast over Quick Settings |
 | 21 / 22 | 1280×720 overflow pass |
+
+---
+
+## Appendix A — Implementations added after the original audit
+
+Two former façades were upgraded to genuinely interactive features (commit `809295f`):
+
+- **Settings** — data-driven renderer with 10 navigable pages (Personalization → Windows Update); every control is live: toggles, action buttons, badges and progress bars, and Windows Update's *Check for updates* runs a real checking → up-to-date flow. Shots `13b` / `13c`.
+- **VS Code** — tabbed editor: four syntax-highlighted files, open/switch/close tabs, empty-state fallback, explorer sidebar toggle and a titlebar that tracks the active file. Shot `14b`.
+
+The current interactive audit (`visual-bugcheck/check.sh --functional`) counts **36 interactive, 4 façade, 0 bugs**. The remaining façades are deliberate MVP mocks: Edge's tab bar, Notepad's File/Edit/View menus, the Photos lightbox, and the Quick Settings tiles.

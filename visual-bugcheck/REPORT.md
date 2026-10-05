@@ -6,16 +6,11 @@
 
 ## Scripts
 
-| Script | Purpose |
-|---|---|
-| `install-deps.sh` | Installs project deps (vite) + `playwright-core` (test driver, `--no-save`) |
-| `install-browser.sh` | Installs a headless Chromium **from the npm registry only** (works in sandboxes where the Playwright CDN is blocked), plus a font set (DejaVu + Noto Color Emoji) that fixes form-control rendering crashes. Writes `/tmp/win11web-browser/env.sh`. |
-| `check.sh` | Ensures deps + browser + dev server, then runs `check.mjs`: captures all screenshots and prints a PASS/BUG table for B1–B12. |
-
-Typical use:
+Full documentation for the tooling (options, environment, CI usage,
+troubleshooting) lives in [`README.md`](./README.md).
 
 ```bash
-visual-bugcheck/check.sh            # everything in one go
+npm run test:visual          # = visual-bugcheck/check.sh (self-provisioning)
 ```
 
 > Environment notes (things that are **not** app bugs): the sandbox has no outbound internet, so external images (Bing logo, news thumbs, user avatar, Photos grid) show broken-image placeholders in the shots; and a minimal font set means a few exotic glyphs (⎘, ⎗, ＋, , 🖥, PUA `󰀀`) render as tofu here although they exist on typical Windows/macOS machines. Those are listed separately at the end as portability notes.

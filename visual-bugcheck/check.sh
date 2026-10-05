@@ -10,6 +10,7 @@
 #
 # Usage:
 #   visual-bugcheck/check.sh [--help] [check.mjs options...]
+#   visual-bugcheck/check.sh --functional [functional.mjs options...]
 #
 # Environment:
 #   BROWSER_DIR   browser install location (default: /tmp/win11web-browser)
@@ -68,6 +69,10 @@ if ! port_open "$DEV_PORT"; then
 fi
 
 # --------------------------------------------------------------------------
-# run the check
+# run the check (--functional switches to the interactive audit)
 # --------------------------------------------------------------------------
+if [ "${1:-}" = "--functional" ]; then
+  shift
+  exec node visual-bugcheck/functional.mjs "$@"
+fi
 exec node visual-bugcheck/check.mjs "$@"

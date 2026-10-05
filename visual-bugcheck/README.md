@@ -11,7 +11,8 @@ registry** (never the Playwright CDN), and no system packages are required.
 ## Quick start
 
 ```bash
-visual-bugcheck/check.sh              # installs everything it needs, then runs
+visual-bugcheck/check.sh                    # installs everything it needs, then runs
+visual-bugcheck/check.sh --functional       # interactive audit of apps + window manager
 ```
 
 or step by step:
@@ -30,6 +31,7 @@ visual-bugcheck/check.sh              # screenshot tour + findings table
 | `install-browser.sh` | Provisions a headless Chromium from `@sparticuz/chromium` (npm), inflates the brotli pack, wires up bundled GL libs, and assembles a font set (system DejaVu + Noto Color Emoji from npm) that the stripped build needs to paint form controls. Writes `env.sh` next to the install. |
 | `check.sh` | Ensures deps → browser → dev server (starts vite on `:5173` if free, kills it on exit), then runs `check.mjs`. Unknown flags are forwarded to `check.mjs`. |
 | `check.mjs` | The actual check: Playwright tour + DOM assertions. `--help` and `--list` for details. |
+| `functional.mjs` | Interactive audit: clicks, typing, drags through every app and the window manager; classifies each capability as ✅ interactive / 🧱 façade (deliberate MVP mock) / 🐞 bug. Run via `check.sh --functional`. |
 
 ## Options & environment
 

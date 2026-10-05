@@ -8,7 +8,8 @@
     "build": "vite build",
     "preview": "vite preview --host 0.0.0.0 --port 4173",
     "setup:visual": "bash visual-bugcheck/install-deps.sh && bash visual-bugcheck/install-browser.sh",
-    "test:visual": "bash visual-bugcheck/check.sh"
+    "test:visual": "bash visual-bugcheck/check.sh",
+    "test:functional": "bash visual-bugcheck/check.sh --functional"
   },
   "devDependencies": {
     "vite": "^5.4.0"

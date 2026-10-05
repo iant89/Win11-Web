@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Windows 11 — Web MVP</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@300;400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+<body>
+  <!-- Boot Screen -->
+  <div id="boot-screen">
+    <div class="boot-logo">
+      <svg width="88" height="88" viewBox="0 0 48 48" fill="none">
+        <path d="M6 10.2L21.2 8V22.8L6 22.8V10.2Z" fill="#0078D4"/>
+        <path d="M23.8 7.6L42 5V22.8L23.8 22.8V7.6Z" fill="#0078D4"/>
+        <path d="M6 25.2L21.2 25.2L21.2 40L6 37.4V25.2Z" fill="#0078D4"/>
+        <path d="M23.8 25.2L42 25.2L42 43L23.8 40V25.2Z" fill="#0078D4"/>
+      </svg>
+    </div>
+    <div class="boot-spinner"></div>
+    <div class="boot-text">Welcome</div>
+  </div>
+
+  <!-- Wallpaper -->
+  <div id="wallpaper">
+    <div class="wallpaper-bloom bloom-1"></div>
+    <div class="wallpaper-bloom bloom-2"></div>
+    <div class="wallpaper-bloom bloom-3"></div>
+  </div>
+
+  <!-- Desktop Icons -->
+  <div id="desktop-icons">
+    <button class="desktop-icon" data-app="explorer" data-path="This PC">
+      <span class="d-icon" style="background:#3A96DD"><svg width="28" height="28" viewBox="0 0 24 24" fill="white"><path d="M10 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg></span>
+      <span>This PC</span>
+    </button>
+    <button class="desktop-icon" data-app="explorer" data-path="Recycle Bin">
+      <span class="d-icon" style="background:#7a7a7a"><svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M9 3h6l1 2h5v2H3V5h5l1-2zm-4 6h14l-1 9H6l-1-9zm3 2v6h2v-6H8zm4 0v6h2v-6h-2z"/></svg></span>
+      <span>Recycle Bin</span>
+    </button>
+    <button class="desktop-icon" data-app="edge">
+      <span class="d-icon" style="background:linear-gradient(135deg,#0c59a4,#35b6ed)"><svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10c.54 0 1.07-.05 1.59-.14 1.2-3.11 1.2-6.62 0-9.72A9.96 9.96 0 0012 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8c.48 0 .94.04 1.39.12C11.5 7.2 11.5 12.8 13.39 15.88A8 8 0 0112 20z"/></svg></span>
+      <span>Microsoft Edge</span>
+    </button>
+    <button class="desktop-icon" data-app="explorer" data-path="Documents">
+      <span class="d-icon" style="background:#F2C94C"><svg width="26" height="26" viewBox="0 0 24 24" fill="white"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6z"/><path d="M14 2v6h6" fill="none" stroke="#D4A017" stroke-width="1.2"/></svg></span>
+      <span>Documents</span>
+    </button>
+    <button class="desktop-icon" data-app="vscode">
+      <span class="d-icon" style="background:#007ACC"><svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M1.5 8.5l4.5-3 9 5.5-9 5.5-4.5-3v-5z"/><path d="M16 6.5l5-3v13l-5-3v-7z" opacity=".7"/></svg></span>
+      <span>VS Code</span>
+    </button>
+  </div>
+
+  <!-- Desktop Context Menu -->
+  <div id="desktop-context" class="context-menu">
+    <button><span>󰀀</span> View <span class="arrow">›</span></button>
+    <button><span>⇅</span> Sort by <span class="arrow">›</span></button>
+    <button><span>↻</span> Refresh</button>
+    <div class="sep"></div>
+    <button id="ctx-new-folder"><span>📁</span> New folder</button>
+    <button><span>⚙</span> Display settings</button>
+    <button><span>🎨</span> Personalize</button>
+    <div class="sep"></div>
+    <button><span>▭</span> Show more options</button>
+  </div>
+
+  <!-- Snap Overlay -->
+  <div id="snap-overlay"></div>
+
+  <!-- Windows Container -->
+  <div id="windows"></div>
+
+  <!-- Widgets Panel -->
+  <div id="widgets-panel">
+    <div class="widgets-header">
+      <h2>Widgets</h2>
+      <button class="icon-btn" id="close-widgets">✕</button>
+    </div>
+    <div class="widgets-grid">
+      <div class="widget-card weather">
+        <div class="w-top">
+          <span class="w-icon">⛅</span>
+          <div>
+            <div class="w-temp">26°</div>
+            <div class="w-desc">Partly sunny • Seattle</div>
+          </div>
+          <span class="w-ahi">AQI 42 • Good</span>
+        </div>
+        <div class="w-forecast">
+          <span><b>27°</b> Mon</span><span><b>24°</b> Tue</span><span><b>22°</b> Wed</span><span><b>25°</b> Thu</span>
+        </div>
+      </div>
+      <div class="widget-card">
+        <div class="widget-title">Calendar <span>• Outlook</span></div>
+        <div class="cal-row"><span class="cal-date"><b>05</b> OCT</span><span>Team Standup — 10:00 AM</span><span class="tag">Teams</span></div>
+        <div class="cal-row"><span class="cal-date"><b>05</b> OCT</span><span>Design Review — 2:30 PM</span><span class="tag alt">Office</span></div>
+        <div class="cal-row"><span class="cal-date"><b>06</b> OCT</span><span>Ship Win11 Web MVP ✦</span></div>
+      </div>
+      <div class="widget-card">
+        <div class="widget-title">To Do</div>
+        <label class="todo"><input type="checkbox"> Finish Snap Layouts implementation</label>
+        <label class="todo"><input type="checkbox" checked> Polish Start Menu animation</label>
+        <label class="todo"><input type="checkbox"> Test Virtual Desktops</label>
+      </div>
+      <div class="widget-card photos">
+        <div class="widget-title">Photos</div>
+        <div class="photos-grid">
+          <div class="ph" style="background:linear-gradient(135deg,#667eea,#764ba2)"></div>
+          <div class="ph" style="background:linear-gradient(135deg,#f093fb,#f5576c)"></div>
+          <div class="ph" style="background:linear-gradient(135deg,#4facfe,#00f2fe)"></div>
+          <div class="ph" style="background:linear-gradient(135deg,#43e97b,#38f9d7)"></div>
+        </div>
+      </div>
+      <div class="widget-card news">
+        <div class="widget-title">Top stories</div>
+        <div class="news-item"><img src="https://picsum.photos/seed/news1/60/60" alt=""><div><b>Microsoft announces new Surface lineup</b><span> The Verge • 2h ago</span></div></div>
+        <div class="news-item"><img src="https://picsum.photos/seed/news2/60/60" alt=""><div><b>How Snap Layouts boost productivity</b><span> Windows Central • 5h ago</span></div></div>
+      </div>
+      <div class="widget-card tips">
+        <div class="widget-title">Tips • <span style="font-weight:400">Did you know?</span></div>
+        <p>Press <kbd>Win</kbd> + <kbd>Z</kbd> to open Snap Layouts instantly, or drag a window to the top edge.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Task View (Virtual Desktops) -->
+  <div id="task-view">
+    <div class="tv-header">
+      <h2>Desktops</h2>
+      <button class="new-desktop-btn" id="new-desktop">+ New desktop</button>
+      <button class="icon-btn" id="close-taskview">✕</button>
+    </div>
+    <div id="desktops-bar"></div>
+    <div id="tv-windows"></div>
+    <div class="tv-timeline">Timeline • <span>Today</span></div>
+  </div>
+
+  <!-- Quick Settings -->
+  <div id="quick-settings">
+    <div class="qs-grid">
+      <button class="qs-tile active"><span>📶</span>Wi-Fi<div>Contoso-5G</div></button>
+      <button class="qs-tile active"><span>🔊</span>Sound<div>Speakers (HD)</div></button>
+      <button class="qs-tile active"><span>🔆</span>Bluetooth<div>On</div></button>
+      <button class="qs-tile"><span>✈</span>Flight mode<div>Off</div></button>
+      <button class="qs-tile"><span>🔋</span>Battery saver<div>Off</div></button>
+      <button class="qs-tile"><span>🌙</span>Focus assist<div>Off</div></button>
+    </div>
+    <div class="qs-sliders">
+      <label><span>☀</span><input type="range" min="0" max="100" value="78" id="brightness"><span>🔊</span><input type="range" min="0" max="100" value="42" id="volume"></label>
+    </div>
+    <div class="qs-footer">
+      <button><span>⚙</span></button>
+      <button><span>🔋 87%</span></button>
+    </div>
+  </div>
+
+  <!-- Notification Center -->
+  <div id="notification-center">
+    <div class="nc-header"><h3>Notifications</h3><button id="clear-notifs">Clear all</button></div>
+    <div id="notif-list">
+      <div class="notif"><span class="n-icon" style="background:#0078D4">✓</span><div><b>Windows Security</b><p>Device meets security baseline • TPM 2.0 active</p><span>2 min ago</span></div></div>
+      <div class="notif"><span class="n-icon" style="background:#8764B8">📦</span><div><b>Microsoft Store</b><p>Spotify installed successfully</p><span>1 hour ago</span></div></div>
+    </div>
+    <div class="nc-calendar">
+      <div class="nc-cal-header"><b>October 2025</b> <span>Collapse ▲</span></div>
+      <div class="mini-cal">
+        <span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span>
+        <span class="dim">28</span><span class="dim">29</span><span class="dim">30</span><span>1</span><span>2</span><span>3</span><span>4</span><span class="today">5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Start Menu -->
+  <div id="start-menu">
+    <div class="start-search">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      <input id="start-search" type="text" placeholder="Type here to search" autocomplete="off" />
+    </div>
+
+    <div class="start-section">
+      <div class="start-head"><h3>Pinned</h3><button class="pill-btn">All apps ›</button></div>
+      <div id="pinned-grid"></div>
+    </div>
+
+    <div class="start-section">
+      <div class="start-head"><h3>Recommended</h3><button class="pill-btn">More ›</button></div>
+      <div id="recommended-list"></div>
+    </div>
+
+    <div class="start-footer">
+      <button class="user-btn"><img src="https://i.pravatar.cc/100?img=12" alt=""> <span><b>Avery Chen</b><small>avery@contoso.com</small></span></button>
+      <button class="icon-btn" title="Power">⏻</button>
+    </div>
+  </div>
+
+  <!-- Taskbar -->
+  <div id="taskbar">
+    <div class="taskbar-bg"></div>
+    <div class="taskbar-inner">
+      <div class="taskbar-left">
+        <button id="widgets-btn" class="task-icon" title="Widgets">
+          <span class="w-icon-small"><span style="background:#0078D4"></span><span style="background:#5EA0EF"></span><span style="background:#FFB900"></span></span>
+        </button>
+      </div>
+
+      <div class="taskbar-center">
+        <button id="start-btn" class="task-icon" title="Start">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+            <path d="M3 3.5L10.2 2.4V11H3V3.5Z" fill="#0078D4"/>
+            <path d="M12 2L21 1V11H12V2Z" fill="#0078D4"/>
+            <path d="M3 13L10.2 13L10.2 21.6L3 20.5V13Z" fill="#0078D4"/>
+            <path d="M12 13L21 13L21 23L12 21.6V13Z" fill="#0078D4"/>
+          </svg>
+        </button>
+        <button class="task-icon" data-app="search" title="Search"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4b5563" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20L16.5 16.5"/></svg></button>
+        <button class="task-icon" id="taskview-btn" title="Task view"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="14" rx="1.5" stroke="#4b5563" stroke-width="1.6"/><path d="M3 9h18" stroke="#4b5563" stroke-width="1.2"/><rect x="6" y="12" width="5" height="3" rx=".6" fill="#4b5563"/><rect x="13" y="12" width="5" height="3" rx=".6" fill="#9ca3af"/></svg></button>
+        <button class="task-icon" data-app="edge" title="Microsoft Edge"><span class="edge-icon">e</span></button>
+        <button class="task-icon" data-app="explorer" title="File Explorer"><svg width="20" height="18" viewBox="0 0 24 20" fill="#FFCA28"><path d="M2 6l2-3h6l2 3h8v10a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"/><path d="M2 6h20v2H2z" fill="#FFA000"/></svg></button>
+        <button class="task-icon" data-app="store" title="Microsoft Store"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M3 7l2-2h14l2 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V7z" fill="white" stroke="#10B981" stroke-width="1.2"/><path d="M8 10h8M12 7v7" stroke="#10B981" stroke-width="1.4" stroke-linecap="round"/></svg></button>
+        <div class="task-sep"></div>
+        <div id="running-apps"></div>
+      </div>
+
+      <div class="taskbar-right">
+        <button class="tray-chevron" title="Show hidden icons">∧</button>
+        <div class="tray-icons">
+          <span title="OneDrive" style="color:#0078D4">◯</span>
+          <span title="Windows Security">🛡</span>
+        </div>
+        <button id="quicksettings-btn" class="tray-group">
+          <span>📶</span><span>🔊</span><span>🔋</span>
+        </button>
+        <button id="tray-clock" class="tray-clock">
+          <span id="clock-time">10:42 AM</span>
+          <span id="clock-date">10/5/2025</span>
+        </button>
+        <button id="notif-btn" class="tray-notif" title="Notifications"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="1.6"><path d="M6 14V10a6 6 0 1112 0v4l2 2v1H4v-1l2-2z"/><path d="M10 20a2 2 0 004 0"/></svg></button>
+        <div class="tray-show-desktop" title="Show desktop"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toasts -->
+  <div id="toasts"></div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
